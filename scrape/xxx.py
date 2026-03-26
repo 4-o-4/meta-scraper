@@ -9,6 +9,7 @@ from figma_nodes import TextSegment, TextStyleName
 from text_segments import TextSegments
 
 _SOFT_LINE_BREAK = "\u2028"
+_NEWLINE = "\u000A"
 _NBSP = "\u00a0"
 _TARGET_TAGS: set[str] = {"h1", "h2", "h3", "p", "ul"}
 
@@ -43,7 +44,7 @@ def _process_element(
     tag = el.tag_name.lower()
 
     if search_targets and tag in _TARGET_TAGS:
-        text = el.text.strip()
+        text = el.text.strip().replace(_NEWLINE, "")
         if text:
             out.append(
                 TextSegment(
