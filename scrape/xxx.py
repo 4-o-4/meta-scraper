@@ -44,14 +44,28 @@ def _process_element(
     tag = el.tag_name.lower()
 
     if search_targets and tag in _TARGET_TAGS:
-        text = el.text.strip().replace(_NEWLINE, "")
-        if text:
-            out.append(
-                TextSegment(
-                    characters=text,
-                    textStyleName=_tag_to_text_style_name(tag),
+        if tag == "ul":
+            items: list[str] = []
+            for li in el.find_elements(By.CSS_SELECTOR, "li"):
+                li_text = li.text.strip().replace(_NEWLINE, "")
+                if li_text:
+                    items.append(li_text)
+            if items:
+                out.append(
+                    TextSegment(
+                        characters=items,
+                        textStyleName=_tag_to_text_style_name(tag),
+                    )
                 )
-            )
+        else:
+            text = el.text.strip().replace(_NEWLINE, "")
+            if text:
+                out.append(
+                    TextSegment(
+                        characters=text,
+                        textStyleName=_tag_to_text_style_name(tag),
+                    )
+                )
         return
 
     if tag == "div":

@@ -19,10 +19,10 @@ class FigmaNodeType(str, Enum):
 
 @dataclass(frozen=True, slots=True)
 class TextSegment:
-    characters: str
+    characters: str | list[str]
     textStyleName: TextStyleName
 
-    def as_json_dict(self) -> dict[str, str]:
+    def as_json_dict(self) -> dict[str, object]:
         return {
             "characters": self.characters,
             "textStyleName": self.textStyleName.value,
